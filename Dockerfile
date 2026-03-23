@@ -8,6 +8,12 @@ RUN npm run build
 
 # Étape 2 : Serveur de production (Nginx)
 FROM nginx:stable-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+
+# On crée le sous-dossier correspondant à la "base" de Vite
+RUN mkdir -p /usr/share/nginx/html/docker-test
+
+# On copie le contenu du build dans ce sous-dossier spécifique
+COPY --from=build /app/dist /usr/share/nginx/html/docker-test
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
